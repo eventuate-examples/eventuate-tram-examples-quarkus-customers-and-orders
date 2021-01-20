@@ -7,12 +7,12 @@ import io.eventuate.examples.tram.ordersandcustomers.commondomain.OrderRejectedE
 import io.eventuate.examples.tram.ordersandcustomers.orders.domain.Order;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.events.publisher.ResultWithEvents;
-import io.micronaut.spring.tx.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static java.util.Collections.singletonList;
@@ -21,10 +21,10 @@ import static java.util.Collections.singletonList;
 public class OrderService {
 
   @Inject
-  private DomainEventPublisher domainEventPublisher;
+  DomainEventPublisher domainEventPublisher;
 
   @PersistenceContext
-  private EntityManager entityManager;
+  EntityManager entityManager;
 
   @Transactional
   public Order createOrder(OrderDetails orderDetails) {

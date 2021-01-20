@@ -14,7 +14,7 @@ import javax.inject.Singleton;
 public class OrderHistoryEventConsumer {
 
   @Inject
-  private OrderHistoryViewService orderHistoryViewService;
+  OrderHistoryViewService orderHistoryViewService;
 
   public DomainEventHandlers domainEventHandlers() {
     return DomainEventHandlersBuilder

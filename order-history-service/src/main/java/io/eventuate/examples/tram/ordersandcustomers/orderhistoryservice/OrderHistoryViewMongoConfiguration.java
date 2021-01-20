@@ -1,16 +1,15 @@
 package io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.domain.CustomerViewRepository;
 import io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.domain.OrderViewRepository;
 import io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.service.OrderHistoryViewService;
-import io.micronaut.context.annotation.Factory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import javax.inject.Singleton;
 
-@Factory
-public class OrderHistoryViewMongoFactory {
+@Singleton
+public class OrderHistoryViewMongoConfiguration {
 
   @Singleton
   public MongoTemplate mongoTemplate(MongoClient mongoClient) {

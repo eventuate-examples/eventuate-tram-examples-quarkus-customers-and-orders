@@ -12,7 +12,7 @@ import javax.inject.Singleton;
 public class CustomerHistoryEventConsumer {
 
   @Inject
-  private OrderHistoryViewService orderHistoryViewService;
+  OrderHistoryViewService orderHistoryViewService;
 
   public DomainEventHandlers domainEventHandlers() {
     return DomainEventHandlersBuilder

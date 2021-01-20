@@ -2,23 +2,23 @@ package io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.web.cu
 
 import io.eventuate.examples.tram.ordersandcustomers.orderhistory.common.CustomerView;
 import io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.domain.CustomerViewRepository;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
 
 import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
-@Controller
+@Path("/customers")
 public class CustomerOrderHistoryController {
 
   @Inject
-  private CustomerViewRepository customerViewRepository;
+  CustomerViewRepository customerViewRepository;
 
-  @Get("/customers/{customerId}")
-  public HttpResponse<CustomerView> getCustomer(Long customerId) {
-    return customerViewRepository
-            .findById(customerId)
-            .map(HttpResponse::ok)
-            .orElseGet(HttpResponse::notFound);
+  @Path("/{customerId}")
+  @GET
+  public CustomerView getCustomer(@PathParam("customerId") Long customerId) {
+    return customerViewRepository.findById(customerId).orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
   }
 }

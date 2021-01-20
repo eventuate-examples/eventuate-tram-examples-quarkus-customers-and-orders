@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 public class CustomerEventConsumer {
 
   @Inject
-  private OrderService orderService;
+  OrderService orderService;
 
   public DomainEventHandlers domainEventHandlers() {
     return DomainEventHandlersBuilder

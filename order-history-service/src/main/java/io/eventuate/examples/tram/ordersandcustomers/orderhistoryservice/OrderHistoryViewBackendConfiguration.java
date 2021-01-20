@@ -4,13 +4,12 @@ import io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.service
 import io.eventuate.examples.tram.ordersandcustomers.orderhistoryservice.service.OrderHistoryEventConsumer;
 import io.eventuate.tram.events.subscriber.DomainEventDispatcher;
 import io.eventuate.tram.events.subscriber.DomainEventDispatcherFactory;
-import io.micronaut.context.annotation.Factory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-@Factory
-public class OrderHistoryViewBackendFactory {
+@Singleton
+public class OrderHistoryViewBackendConfiguration {
 
   @Named("orderHistoryDomainEventDispatcher")
   @Singleton

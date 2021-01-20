@@ -3,8 +3,6 @@ services:
   order-service:
     build:
       context: ./order-service/
-      args:
-        baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
     image: eventuateexamples/eventuate-tram-examples-micronaut-customers-and-orders-order-service
     ports:
       - "8081:8080"
@@ -14,10 +12,7 @@ services:
       - zookeeper
       - cdc-service
     environment:
-      MYSQL: mysql
-      KAFKA: kafka
-      KAFKA_PORT: 29092
-      ZOOKEEPER: zookeeper
+      EVENTUATEDATABASE: mysql
 
   customer-service:
     build:
@@ -36,8 +31,6 @@ services:
   order-history-service:
     build:
       context: ./order-history-service/
-      args:
-        baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
     image: eventuateexamples/eventuate-tram-examples-micronaut-customers-and-orders-order-history-service
     ports:
       - "8083:8080"
@@ -46,11 +39,6 @@ services:
       - kafka
       - zookeeper
       - cdc-service
-    environment:
-      MONGODB: mongodb
-      KAFKA: kafka
-      KAFKA_PORT: 29092
-      ZOOKEEPER: zookeeper
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.2.4

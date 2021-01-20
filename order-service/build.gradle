@@ -1,19 +1,6 @@
 plugins {
-    id "io.spring.dependency-management"
-    id "java"
-    id "com.github.johnrengelman.shadow" version "4.0.2"
-    id "application"
-}
-
-repositories {
-    mavenCentral()
-    maven { url "https://jcenter.bintray.com" }
-}
-
-dependencyManagement {
-    imports {
-        mavenBom 'io.micronaut:micronaut-bom:1.1.3'
-    }
+    id "io.quarkus" version "${quarkusVersion}"
+    id 'org.kordamp.gradle.jandex' version '0.6.0'
 }
 
 dependencies {
@@ -22,34 +9,17 @@ dependencies {
     compile project(":customer-service-api-events")
     compile project(":order-service-api-events")
 
-    compile "io.eventuate.tram.core:eventuate-tram-micronaut-jdbc-kafka:$eventuateTramVersion"
-    compile "io.eventuate.tram.core:eventuate-tram-micronaut-spring-jdbc-optimistic-locking:$eventuateTramVersion"
+    compile "io.eventuate.tram.core:eventuate-tram-quarkus-jdbc-kafka:$eventuateTramQuarkusVersion"
 
-    annotationProcessor "javax.persistence:javax.persistence-api:2.2"
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
-    annotationProcessor "io.micronaut.configuration:micronaut-openapi"
-    compile "io.micronaut:micronaut-spring"
-    compile "io.micronaut.configuration:micronaut-hibernate-jpa"
-    compile 'io.micronaut.configuration:micronaut-jdbc-hikari'
-    compile "io.micronaut:micronaut-inject"
-    compile "io.micronaut:micronaut-validation"
-    compile "io.micronaut:micronaut-runtime"
-    compile "io.micronaut:micronaut-http-server-netty"
-    compile 'io.micronaut:micronaut-management'
-    runtime "ch.qos.logback:logback-classic:1.2.3"
+    compile 'io.quarkus:quarkus-core'
+    compile 'io.quarkus.arc:arc'
+    compile 'io.quarkus:quarkus-arc-deployment'
 
-    compile "io.swagger.core.v3:swagger-annotations"
-    compile "io.eventuate.util:eventuate-util-swagger-ui:$eventuateUtilVersion"
+    compile 'io.quarkus:quarkus-resteasy-jackson'
 
-    runtime 'mysql:mysql-connector-java:5.1.36'
-    runtime ('org.postgresql:postgresql:9.4-1200-jdbc41') {
-        exclude group: "org.slf4j", module: "slf4j-simple"
-    }
-}
+    compile 'io.quarkus:quarkus-jdbc-mysql'
 
-mainClassName = "io.eventuate.examples.tram.ordersandcustomers.orders.OrderServiceMain"
+    compile 'io.quarkus:quarkus-hibernate-orm'
 
-shadowJar {
-    mergeServiceFiles()
+    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
 }
