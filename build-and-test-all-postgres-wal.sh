@@ -4,7 +4,6 @@ set -e
 
 export DATABASE=postgres
 export MODE=wal
-
-export MICRONAUT_ENVIRONMENTS=postgres
+export EVENTUATEDATABASE=postgres
 
 ./_build-and-test-all.sh
