@@ -1,0 +1,34 @@
+datasources:
+  default:
+    url: jdbc:mysql://${MYSQL:$DOCKER_HOST_IP:localhost}/eventuate
+    driverClassName: com.mysql.jdbc.Driver
+    username: mysqluser
+    password: mysqlpw
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: ${KAFKA:$DOCKER_HOST_IP:localhost}:${KAFKA_PORT:9092}
+jpa:
+  default:
+    packages-to-scan:
+      - 'io.eventuate.examples.tram.ordersandcustomers.orders.domain'
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+micronaut:
+  router:
+    static-resources:
+      swagger-ui:
+        paths: classpath:META-INF/swagger-ui
+        mapping: /swagger-ui/**
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+
