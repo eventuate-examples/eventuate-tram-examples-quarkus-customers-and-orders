@@ -1,0 +1,22 @@
+plugins {
+    id "io.quarkus" version "${quarkusVersion}"
+    id 'org.kordamp.gradle.jandex' version '0.6.0'
+}
+
+dependencies {
+    compile project(":customer-service-api-events")
+    compile project(":order-service-api-events")
+    compile project(":order-history-service-common")
+
+    compile "io.eventuate.tram.core:eventuate-tram-quarkus-consumer-kafka:$eventuateTramQuarkusVersion"
+
+    compile "io.quarkus:quarkus-mongodb-client"
+
+    compile 'io.quarkus:quarkus-core'
+    compile 'io.quarkus.arc:arc'
+    compile 'io.quarkus:quarkus-arc-deployment'
+
+    compile 'io.quarkus:quarkus-resteasy-jackson'
+
+    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
+}

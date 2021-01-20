@@ -1,0 +1,40 @@
+plugins {
+    id "io.quarkus" version "${quarkusVersion}"
+    id 'org.kordamp.gradle.jandex' version '0.6.0'
+}
+
+dependencies {
+    compile project(":common")
+    compile project(":customer-service-api-web")
+    compile project(":customer-service-api-events")
+    compile project(":order-service-api-events")
+
+    compile "io.eventuate.tram.core:eventuate-tram-quarkus-jdbc-kafka:$eventuateTramQuarkusVersion"
+
+    compile "io.eventuate.common:eventuate-common-quarkus-jdbc-test-configuration:$eventuateCommonQuarkusVersion"
+
+    compile 'io.quarkus:quarkus-core'
+    compile 'io.quarkus.arc:arc'
+    compile 'io.quarkus:quarkus-arc-deployment'
+
+    compile 'io.quarkus:quarkus-resteasy-jackson'
+
+    compile 'io.quarkus:quarkus-jdbc-mysql'
+
+    compile 'io.quarkus:quarkus-hibernate-orm'
+
+    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
+}
+
+import org.apache.tools.ant.filters.*
+processResources {
+    if (System.env.EVENTUATEDATABASE == "postgres") {
+        filter ReplaceTokens, tokens: [
+            "HIBERNATE_DIALECT": "quarkus.hibernate-orm.dialect=org.hibernate.dialect.ProgressDialect"
+        ]
+    } else {
+        filter ReplaceTokens, tokens: [
+                "HIBERNATE_DIALECT": ""
+        ]
+    }
+}
