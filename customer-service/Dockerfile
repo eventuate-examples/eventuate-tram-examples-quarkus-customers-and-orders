@@ -1,5 +1,4 @@
-FROM openjdk:8u252-slim-buster
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-COPY build/customer-service-0.1.0-SNAPSHOT-runner.jar customer-service-0.1.0-SNAPSHOT-runner.jar
+ARG baseImageVersion
+FROM eventuateio/eventuate-examples-docker-images-quarkus-example-base-image:$baseImageVersion
+COPY build/customer-service-*.jar service.jar
 COPY build/lib/ lib/
-CMD java ${JAVA_OPTS:-"-Xmx64m"} -jar customer-service-0.1.0-SNAPSHOT-runner.jar

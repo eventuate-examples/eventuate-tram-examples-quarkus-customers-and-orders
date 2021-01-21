@@ -4,6 +4,7 @@ set -e
 
 export DATABASE=postgres
 export MODE=wal
-export EVENTUATEDATABASE=postgres
+export EVENTUATEDATABASE=postgresql
+export QUARKUS_PROFILE=postgresql
 
 ./_build-and-test-all.sh

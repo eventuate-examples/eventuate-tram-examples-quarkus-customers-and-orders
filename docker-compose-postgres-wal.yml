@@ -15,7 +15,11 @@ services:
       - zookeeper
       - cdc-service
     environment:
-      EVENTUATEDATABASE: postgres
+      EVENTUATEDATABASE: postgresql
+      QUARKUS_DATASOURCE_USERNAME: eventuate
+      QUARKUS_DATASOURCE_PASSWORD: eventuate
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://postgres/eventuate
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   customer-service:
     build:
@@ -32,7 +36,11 @@ services:
       - zookeeper
       - cdc-service
     environment:
-      EVENTUATEDATABASE: postgres
+      EVENTUATEDATABASE: postgresql
+      QUARKUS_DATASOURCE_USERNAME: eventuate
+      QUARKUS_DATASOURCE_PASSWORD: eventuate
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://postgres/eventuate
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   order-history-service:
     build:
@@ -46,6 +54,8 @@ services:
       - kafka
       - zookeeper
       - cdc-service
+    environment:
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.2.4

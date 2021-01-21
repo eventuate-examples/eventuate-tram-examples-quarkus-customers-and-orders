@@ -11,15 +11,15 @@ dependencies {
 
     compile "io.eventuate.tram.core:eventuate-tram-quarkus-jdbc-kafka:$eventuateTramQuarkusVersion"
 
-    compile "io.eventuate.common:eventuate-common-quarkus-jdbc-test-configuration:$eventuateCommonQuarkusVersion"
-
     compile 'io.quarkus:quarkus-core'
     compile 'io.quarkus.arc:arc'
     compile 'io.quarkus:quarkus-arc-deployment'
-
+    compile 'io.quarkus:quarkus-smallrye-health'
+    compile 'io.quarkus:quarkus-smallrye-openapi'
     compile 'io.quarkus:quarkus-resteasy-jackson'
 
     compile 'io.quarkus:quarkus-jdbc-mysql'
+    compile 'io.quarkus:quarkus-jdbc-postgresql'
 
     compile 'io.quarkus:quarkus-hibernate-orm'
 
@@ -28,13 +28,5 @@ dependencies {
 
 import org.apache.tools.ant.filters.*
 processResources {
-    if (System.env.EVENTUATEDATABASE == "postgres") {
-        filter ReplaceTokens, tokens: [
-                "HIBERNATE_DIALECT": "quarkus.hibernate-orm.dialect=org.hibernate.dialect.ProgressDialect"
-        ]
-    } else {
-        filter ReplaceTokens, tokens: [
-                "HIBERNATE_DIALECT": ""
-        ]
-    }
+    filter ReplaceTokens, tokens: ["EVENTUATEDATABASE": System.env.EVENTUATEDATABASE]
 }

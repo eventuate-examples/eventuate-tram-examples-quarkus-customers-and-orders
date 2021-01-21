@@ -1,43 +1,53 @@
-version: 2
-jobs:
-  build:
-    machine: true
-    working_directory: ~/eventuate-tram-examples-quarkus-customers-and-orders
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - eventuate-tram-examples-quarkus-customers-and-orders-{{ checksum "gradle.properties" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-            - eventuate-tram-examples-quarkus-customers-and-orders-
-      - run:
-          command: ./.circleci/upgrade-docker-compose.sh
-      - run:
-          command: |
-            . ./.circleci/setenv-circle-ci.sh
-            ./gradlew testClasses
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: eventuate-tram-examples-quarkus-customers-and-orders-{{ checksum "gradle.properties" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - run:
-          command: |
-            . ./.circleci/setenv-circle-ci.sh
-            ./build-and-test-all-mysql-binlog.sh
-      - run:
-          command: |
-            . ./.circleci/setenv-circle-ci.sh
-            ./build-and-test-all-postgres-polling.sh
-      - run:
-          command: |
-            . ./.circleci/setenv-circle-ci.sh
-            ./build-and-test-all-postgres-wal.sh
-      - run:
-          name: Save test results
-          command: ./.circleci/save-containers-and-tests.sh
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/container-logs
+version: 2.1
+orbs:
+  build-and-test:
+    jobs:
+      build-and-test:
+        parameters:
+          script:
+            description: the script to execute
+            type: string
+        machine: true
+        working_directory: ~/eventuate-tram-examples-quarkus-customers-and-orders
+        steps:
+          - checkout
+          - restore_cache:
+              keys:
+                - eventuate-tram-examples-quarkus-customers-and-orders-{{ checksum "gradle.properties" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+                - eventuate-tram-examples-quarkus-customers-and-orders-
+          - run:
+              command: |
+                ./.circleci/upgrade-docker-compose.sh
+                ./gradlew testClasses aggregateJavaDocs
+          - run:
+              command: |
+                . ./.circleci/setenv-circle-ci.sh
+                ./gradlew testClasses
+          - save_cache:
+              paths:
+                - ~/.gradle
+              key: eventuate-tram-examples-quarkus-customers-and-orders-{{ checksum "gradle.properties" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          - run: <<parameters.script>>
+          - run:
+              name: Save test results
+              command: ./.circleci/save-containers-and-tests.sh
+              when: always
+          - store_test_results:
+              path: ~/junit
+          - store_artifacts:
+              path: ~/junit
+          - store_artifacts:
+              path: ~/container-logs
+workflows:
+  version: 2.1
+  build-test-and-deploy:
+    jobs:
+      - build-and-test/build-and-test:
+          name: build-and-test-mysql-binlog
+          script: ./build-and-test-all-mysql-binlog.sh
+      - build-and-test/build-and-test:
+          name: build-and-test-postgres-polling
+          script: ./build-and-test-all-postgres-polling.sh
+      - build-and-test/build-and-test:
+          name: build-and-test-postgres-wal
+          script: ./build-and-test-all-postgres-wal.sh
