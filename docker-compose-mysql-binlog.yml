@@ -16,6 +16,7 @@ services:
       QUARKUS_DATASOURCE_USERNAME: mysqluser
       QUARKUS_DATASOURCE_PASSWORD: mysqlpw
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql/eventuate
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   customer-service:
     build:
@@ -33,6 +34,7 @@ services:
       QUARKUS_DATASOURCE_USERNAME: mysqluser
       QUARKUS_DATASOURCE_PASSWORD: mysqlpw
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql/eventuate
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   order-history-service:
     build:
@@ -45,6 +47,8 @@ services:
       - kafka
       - zookeeper
       - cdc-service
+    environment:
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.2.4
