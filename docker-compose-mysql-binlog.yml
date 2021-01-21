@@ -13,6 +13,9 @@ services:
       - cdc-service
     environment:
       EVENTUATEDATABASE: mysql
+      QUARKUS_DATASOURCE_USERNAME: mysqluser
+      QUARKUS_DATASOURCE_PASSWORD: mysqlpw
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql/eventuate
 
   customer-service:
     build:
@@ -27,6 +30,9 @@ services:
       - cdc-service
     environment:
       EVENTUATEDATABASE: mysql
+      QUARKUS_DATASOURCE_USERNAME: mysqluser
+      QUARKUS_DATASOURCE_PASSWORD: mysqlpw
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql/eventuate
 
   order-history-service:
     build:

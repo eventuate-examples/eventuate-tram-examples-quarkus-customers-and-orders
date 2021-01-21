@@ -4,6 +4,6 @@ set -e
 
 export DATABASE=postgres
 export MODE=polling
-export EVENTUATEDATABASE=postgres
+export EVENTUATEDATABASE=postgresql
 
 ./_build-and-test-all.sh
