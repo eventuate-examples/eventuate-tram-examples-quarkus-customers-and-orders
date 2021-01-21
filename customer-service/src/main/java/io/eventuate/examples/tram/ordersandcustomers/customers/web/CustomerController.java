@@ -22,9 +22,4 @@ public class CustomerController {
     Customer customer = customerService.createCustomer(createCustomerRequest.getName(), createCustomerRequest.getCreditLimit());
     return new CreateCustomerResponse(customer.getId());
   }
-
-  @GET
-  public String test() {
-    return "Hello customers";
-  }
 }

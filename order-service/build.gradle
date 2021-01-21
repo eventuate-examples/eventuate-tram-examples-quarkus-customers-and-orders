@@ -15,7 +15,7 @@ dependencies {
     compile 'io.quarkus.arc:arc'
     compile 'io.quarkus:quarkus-arc-deployment'
     compile 'io.quarkus:quarkus-smallrye-health'
-
+    compile 'io.quarkus:quarkus-smallrye-openapi'
     compile 'io.quarkus:quarkus-resteasy-jackson'
 
     compile 'io.quarkus:quarkus-jdbc-mysql'
