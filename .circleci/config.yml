@@ -18,7 +18,7 @@ orbs:
           - run:
               command: |
                 ./.circleci/upgrade-docker-compose.sh
-                ./gradlew testClasses aggregateJavaDocs
+                ./gradlew testClasses
           - run:
               command: |
                 . ./.circleci/setenv-circle-ci.sh
