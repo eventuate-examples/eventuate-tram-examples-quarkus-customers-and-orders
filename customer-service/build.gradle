@@ -28,5 +28,5 @@ dependencies {
 
 import org.apache.tools.ant.filters.*
 processResources {
-    filter ReplaceTokens, tokens: ["EVENTUATEDATABASE": System.env.EVENTUATEDATABASE]
+    filter ReplaceTokens, tokens: ["EVENTUATEDATABASE": System.env.EVENTUATEDATABASE ?: "mysql"]
 }
