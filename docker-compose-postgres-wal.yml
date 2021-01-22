@@ -5,6 +5,7 @@ services:
       context: ./order-service/
       args:
         baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
+    restart: always
     ports:
       - "8081:8080"
     volumes:
@@ -26,6 +27,7 @@ services:
       context: ./customer-service/
       args:
         baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
+    restart: always
     ports:
       - "8082:8080"
     volumes:
@@ -47,6 +49,7 @@ services:
       context: ./order-history-service/
       args:
         baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
+    restart: always
     ports:
       - "8083:8080"
     depends_on:

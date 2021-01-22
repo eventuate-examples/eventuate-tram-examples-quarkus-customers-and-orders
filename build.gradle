@@ -43,9 +43,9 @@ dockerCompose {
         useComposeFiles = ["docker-compose-mysql-binlog.yml"]
     }
 
-    postgrespolling {
+    mssqlpolling {
         projectName = null
-        useComposeFiles = ["docker-compose-postgres-polling.yml"]
+        useComposeFiles = ["docker-compose-mssql-polling.yml"]
     }
 
     postgreswal {
