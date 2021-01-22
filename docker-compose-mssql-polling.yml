@@ -5,20 +5,21 @@ services:
       context: ./order-service/
       args:
         baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
+    restart: always
     ports:
       - "8081:8080"
     volumes:
       - ./build/libs:/app
     depends_on:
-      - postgres
+      - mssql
       - kafka
       - zookeeper
       - cdc-service
     environment:
-      EVENTUATEDATABASE: postgresql
-      QUARKUS_DATASOURCE_USERNAME: eventuate
-      QUARKUS_DATASOURCE_PASSWORD: eventuate
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://postgres/eventuate
+      EVENTUATEDATABASE: mssql
+      QUARKUS_DATASOURCE_USERNAME: sa
+      QUARKUS_DATASOURCE_PASSWORD: Eventuate123!
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:sqlserver://mssql:1433;databaseName=eventuate
       EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   customer-service:
@@ -26,20 +27,21 @@ services:
       context: ./customer-service/
       args:
         baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
+    restart: always
     ports:
       - "8082:8080"
     volumes:
       - ./build/libs:/app
     depends_on:
-      - postgres
+      - mssql
       - kafka
       - zookeeper
       - cdc-service
     environment:
-      EVENTUATEDATABASE: postgresql
-      QUARKUS_DATASOURCE_USERNAME: eventuate
-      QUARKUS_DATASOURCE_PASSWORD: eventuate
-      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://postgres/eventuate
+      EVENTUATEDATABASE: mssql
+      QUARKUS_DATASOURCE_USERNAME: sa
+      QUARKUS_DATASOURCE_PASSWORD: Eventuate123!
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:sqlserver://mssql:1433;databaseName=eventuate
       EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   order-history-service:
@@ -47,6 +49,7 @@ services:
       context: ./order-history-service/
       args:
         baseImageVersion: ${EVENTUATE_JAVA_BASE_IMAGE_VERSION}
+    restart: always
     ports:
       - "8083:8080"
     depends_on:
@@ -82,13 +85,13 @@ services:
       KAFKA_HEAP_OPTS: -Xmx192m
 
 
-  postgres:
-    image: eventuateio/eventuate-postgres:$EVENTUATE_COMMON_VERSION
+  mssql:
+    image: eventuateio/eventuate-mssql:$EVENTUATE_COMMON_VERSION
     ports:
-      - 5432:5432
+      - 1433:1433
     environment:
-      POSTGRES_USER: eventuate
-      POSTGRES_PASSWORD: eventuate
+      SA_PASSWORD: Eventuate123!
+      ACCEPT_EULA: Y
 
 
   mongodb:
@@ -103,17 +106,17 @@ services:
     ports:
       - "8099:8080"
     depends_on:
-      - postgres
+      - mssql
       - kafka
       - zookeeper
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/eventuate
-      SPRING_DATASOURCE_USERNAME: eventuate
-      SPRING_DATASOURCE_PASSWORD: eventuate
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://mssql:1433;databaseName=eventuate
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: Eventuate123!
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
       EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
-      EVENTUATELOCAL_CDC_READER_NAME: PostgresPollingReader
-      SPRING_PROFILES_ACTIVE: EventuatePolling
+      EVENTUATELOCAL_CDC_READER_NAME: MsSqlReader
       EVENTUATE_OUTBOX_ID: 1
+      SPRING_PROFILES_ACTIVE: mssql,EventuatePolling
       JAVA_OPTS: -Xmx64m
