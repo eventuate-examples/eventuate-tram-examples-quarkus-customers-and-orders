@@ -21,7 +21,7 @@ orbs:
           - run:
               command: |
                 . ./.circleci/setenv-circle-ci.sh
-                ./gradlew testClasses
+                ./gradlew testClasses -x processResources
           - save_cache:
               paths:
                 - ~/.gradle
