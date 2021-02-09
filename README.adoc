@@ -1,0 +1,4 @@
+
+= Quarkus version of Eventuate Tram Customer and Orders application
+
+See the https://github.com/eventuate-tram/eventuate-tram-examples-customers-and-orders[Spring Boot version] for details.
