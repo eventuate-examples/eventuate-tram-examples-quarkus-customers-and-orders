@@ -3,52 +3,35 @@ package io.eventuate.examples.tram.ordersandcustomers.endtoendtests;
 import io.eventuate.examples.tram.ordersandcustomers.commondomain.Money;
 import io.eventuate.examples.tram.ordersandcustomers.commondomain.OrderState;
 import io.eventuate.examples.tram.ordersandcustomers.customers.webapi.CreateCustomerRequest;
-import io.eventuate.examples.tram.ordersandcustomers.customers.webapi.CreateCustomerResponse;
 import io.eventuate.examples.tram.ordersandcustomers.orderhistory.common.CustomerView;
 import io.eventuate.examples.tram.ordersandcustomers.orderhistory.common.OrderInfo;
+import io.eventuate.examples.tram.ordersandcustomers.orderhistory.common.OrderView;
 import io.eventuate.examples.tram.ordersandcustomers.orders.webapi.CreateOrderRequest;
-import io.eventuate.examples.tram.ordersandcustomers.orders.webapi.CreateOrderResponse;
-import io.eventuate.examples.tram.ordersandcustomers.orders.webapi.GetOrderResponse;
 import io.eventuate.util.test.async.Eventually;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
+import io.quarkus.test.junit.QuarkusTest;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = CustomersAndOrdersE2ETestConfiguration.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@QuarkusTest
 public class CustomersAndOrdersE2ETest{
 
-  @Value("${DOCKER_HOST_IP:localhost}")
-  private String hostName;
+  @RestClient
+  CustomerRestClientService customerRestClientService;
 
-  private String baseUrlOrders(String path) {
-    return "http://"+hostName+":8081/" + path;
-  }
+  @RestClient
+  OrderRestClientService orderRestClientService;
 
-  private String baseUrlCustomers(String path) {
-    return "http://" + hostName + ":8082/" + path;
-  }
+  @RestClient
+  CustomerViewRestClientService customerViewRestClientService;
 
-  private String baseUrlOrderHistory(String path) {
-    return "http://"+hostName+":8083/" + path;
-  }
-
-  @Autowired
-  RestTemplate restTemplate;
+  @RestClient
+  OrderViewRestClientService orderViewRestClientService;
 
   @Test
   public void shouldApprove() {
@@ -86,47 +69,37 @@ public class CustomersAndOrdersE2ETest{
     Eventually.eventually(100, 400, TimeUnit.MILLISECONDS, () -> {
       CustomerView customerView = getCustomerView(customerId);
 
-      Map<Long, OrderInfo> orders = customerView.getOrders();
+      Map<String, OrderInfo> orders = customerView.getOrders();
 
       assertEquals(2, orders.size());
 
-      assertThat(orders.get(order1Id).getState(), is(OrderState.APPROVED));
-      assertThat(orders.get(order2Id).getState(), is(OrderState.REJECTED));
+      assertEquals(orders.get(String.valueOf(order1Id)).getState(), OrderState.APPROVED);
+      assertEquals(orders.get(String.valueOf(order2Id)).getState(), OrderState.REJECTED);
     });
   }
 
   private CustomerView getCustomerView(Long customerId) {
-    String customerHistoryUrl = baseUrlOrderHistory("customers") + "/" + customerId;
-    ResponseEntity<CustomerView> response = restTemplate.getForEntity(customerHistoryUrl, CustomerView.class);
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-
-    Assert.assertNotNull(response);
-
-    return response.getBody();
+    CustomerView customerView = customerViewRestClientService.getCustomer(customerId);
+    assertNotNull(customerView);
+    return customerView;
   }
 
 
   private Long createCustomer(String name, Money credit) {
-    return restTemplate.postForObject(baseUrlCustomers("customers"),
-            new CreateCustomerRequest(name, credit), CreateCustomerResponse.class).getCustomerId();
+    return customerRestClientService.createCustomer(new CreateCustomerRequest(name, credit)).getCustomerId();
   }
 
   private Long createOrder(Long customerId, Money orderTotal) {
-    return restTemplate.postForObject(baseUrlOrders("orders"),
-            new CreateOrderRequest(customerId, orderTotal), CreateOrderResponse.class).getOrderId();
+    return orderRestClientService.createOrder(new CreateOrderRequest(customerId, orderTotal)).getOrderId();
   }
 
   private void assertOrderState(Long id, OrderState expectedState) {
     Eventually.eventually(100, 400, TimeUnit.MILLISECONDS, () -> {
-      ResponseEntity<GetOrderResponse> response =
-              restTemplate.getForEntity(baseUrlOrders("orders/" + id), GetOrderResponse.class);
+      OrderView orderView = orderViewRestClientService.getOrder(id);
 
-      assertEquals(HttpStatus.OK, response.getStatusCode());
+      assertNotNull(orderView);
 
-      GetOrderResponse order = response.getBody();
-
-      assertEquals(expectedState, order.getOrderState());
+      assertEquals(expectedState, orderView.getState());
     });
   }
 }

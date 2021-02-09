@@ -11,6 +11,7 @@ dependencies {
     compile "io.eventuate.tram.core:eventuate-tram-quarkus-consumer-kafka:$eventuateTramQuarkusVersion"
 
     compile "io.quarkus:quarkus-mongodb-client"
+    compile 'io.quarkus:quarkus-mongodb-panache'
 
     compile 'io.quarkus:quarkus-core'
     compile 'io.quarkus.arc:arc'

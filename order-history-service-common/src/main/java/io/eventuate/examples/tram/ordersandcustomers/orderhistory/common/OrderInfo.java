@@ -19,19 +19,27 @@ public class OrderInfo {
     this.state = OrderState.PENDING;
   }
 
-  public void approve() {
-    state = OrderState.APPROVED;
+  public Long getOrderId() {
+    return orderId;
   }
 
-  public void reject() {
-    state = OrderState.REJECTED;
+  public void setOrderId(Long orderId) {
+    this.orderId = orderId;
   }
 
   public Money getOrderTotal() {
     return orderTotal;
   }
 
+  public void setOrderTotal(Money orderTotal) {
+    this.orderTotal = orderTotal;
+  }
+
   public OrderState getState() {
     return state;
+  }
+
+  public void setState(OrderState state) {
+    this.state = state;
   }
 }
