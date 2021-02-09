@@ -55,6 +55,7 @@ services:
       - cdc-service
     environment:
       EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      QUARKUS_MONGODB_CONNECTION_STRING: mongodb://mongodb:27017/customers_and_orders
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.2.4
@@ -90,11 +91,17 @@ services:
       - MYSQL_PASSWORD=mysqlpw
 
   mongodb:
-    image: mongo:3.0.4
+    image: mongo:4.2.12
     hostname: mongodb
-    command: mongod --smallfiles
     ports:
       - "27017:27017"
+
+  mongoe:
+    image: mongo-express
+    ports:
+    - "9001:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
 
   cdc-service:
     image: eventuateio/eventuate-cdc-service:$EVENTUATE_CDC_VERSION

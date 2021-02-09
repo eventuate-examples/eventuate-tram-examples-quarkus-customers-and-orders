@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 @Path("/customers")
 public class CustomerOrderHistoryController {
@@ -19,6 +20,8 @@ public class CustomerOrderHistoryController {
   @Path("/{customerId}")
   @GET
   public CustomerView getCustomer(@PathParam("customerId") Long customerId) {
-    return customerViewRepository.findById(customerId).orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
+    return Optional
+            .ofNullable(customerViewRepository.findById(customerId))
+            .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
   }
 }

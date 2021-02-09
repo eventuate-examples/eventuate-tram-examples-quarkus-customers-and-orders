@@ -1,11 +1,22 @@
+plugins {
+    id "io.quarkus" version "${quarkusVersion}"
+    id 'org.kordamp.gradle.jandex' version '0.6.0'
+}
+
 dependencies {
     compile project(":order-history-service-common")
     compile project(":customer-service-api-web")
     compile project(":order-service-api-web")
 
-    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-
     testCompile "io.eventuate.util:eventuate-util-test:$eventuateUtilVersion"
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    testCompile 'io.quarkus:quarkus-junit5'
+
+    testCompile 'io.quarkus:quarkus-rest-client'
+    testCompile 'io.quarkus:quarkus-resteasy-jackson'
+
+    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
 }
 
+test {
+    useJUnitPlatform()
+}

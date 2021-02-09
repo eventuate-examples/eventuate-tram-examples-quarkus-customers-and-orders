@@ -28,6 +28,8 @@ dependencies {
 }
 
 import org.apache.tools.ant.filters.*
+
 processResources {
+    outputs.upToDateWhen { false }
     filter ReplaceTokens, tokens: ["EVENTUATEDATABASE": System.env.EVENTUATEDATABASE ?: "mysql"]
 }
