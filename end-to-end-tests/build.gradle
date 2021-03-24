@@ -14,7 +14,7 @@ dependencies {
     testCompile 'io.quarkus:quarkus-rest-client'
     testCompile 'io.quarkus:quarkus-resteasy-jackson'
 
-    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
+
 }
 
 test {

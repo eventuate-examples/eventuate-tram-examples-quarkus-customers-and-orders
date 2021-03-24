@@ -8,7 +8,7 @@ dependencies {
     compile project(":order-service-api-events")
     compile project(":order-history-service-common")
 
-    compile "io.eventuate.tram.core:eventuate-tram-quarkus-consumer-kafka:$eventuateTramQuarkusVersion"
+    compile "io.eventuate.tram.core:eventuate-tram-quarkus-consumer-kafka"
 
     compile "io.quarkus:quarkus-mongodb-client"
     compile 'io.quarkus:quarkus-mongodb-panache'
@@ -20,5 +20,5 @@ dependencies {
     compile 'io.quarkus:quarkus-smallrye-openapi'
     compile 'io.quarkus:quarkus-resteasy-jackson'
 
-    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
+
 }
