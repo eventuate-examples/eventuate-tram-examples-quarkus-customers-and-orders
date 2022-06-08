@@ -39,23 +39,27 @@ dockerCompose {
 
     waitForHealthyStateTimeout = java.time.Duration.ofMinutes(6)
 
+    // Default name can be too long
+
+
     mysqlbinlog {
-        projectName = null
+        projectName = "eventuate-teqco"
         useComposeFiles = ["docker-compose-mysql-binlog.yml"]
     }
+
     kafkaOnly {
-        projectName = null
+        projectName = "eventuate-teqco"
         useComposeFiles = ["docker-compose-mysql-binlog.yml"]
         startedServices = ["kafka"]
     }
 
     mssqlpolling {
-        projectName = null
+        projectName = "eventuate-teqco"
         useComposeFiles = ["docker-compose-mssql-polling.yml"]
     }
 
     postgreswal {
-        projectName = null
+        projectName = "eventuate-teqco"
         useComposeFiles = ["docker-compose-postgres-wal.yml"]
     }
 }

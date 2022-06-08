@@ -2,7 +2,7 @@
 
 docker run \
    --name mssqlterm --rm \
-   --network=${PWD##*/}_default \
+   --network=eventuate-teqco_default \
    -e MSSQL_HOST=mssql \
    -e QUERY="$1" \
    mcr.microsoft.com/mssql/server:2017-latest  \
