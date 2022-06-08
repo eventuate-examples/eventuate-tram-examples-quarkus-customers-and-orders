@@ -11,6 +11,7 @@ ${dockerall}Down
 ${dockerall}Up
 
 #Testing db cli
+
 if [ "${DATABASE}" == "mysql" ]; then
   echo 'show databases;' | ./mysql-cli.sh -i
 elif [ "${DATABASE}" == "postgres" ]; then
